@@ -11977,7 +11977,8 @@ int hdd_wlan_startup(struct device *dev )
       if(!VOS_IS_STATUS_SUCCESS( status ))
       {
          hddLog(VOS_TRACE_LEVEL_FATAL,"%s: vos_watchdog_open failed",__func__);
-         goto err_wdclose;
+         //goto err_wdclose;
+         goto err_wdog_create_fail;
       }
    }
 
@@ -12687,6 +12688,10 @@ err_vos_nv_close:
 err_wdclose:
    if(pHddCtx->cfg_ini->fIsLogpEnabled)
       vos_watchdog_close(pVosContext);
+
+err_wdog_create_fail:
+    if(pHddCtx->cfg_ini->fIsLogpEnabled)
+        vos_watchdog_fail_handle(pVosContext);
 
 err_config:
    kfree(pHddCtx->cfg_ini);

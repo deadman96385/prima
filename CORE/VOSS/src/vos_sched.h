@@ -511,6 +511,7 @@ VOS_STATUS vos_sched_close( v_PVOID_t pVosContext);
   
 ---------------------------------------------------------------------------*/
 VOS_STATUS vos_watchdog_close ( v_PVOID_t pVosContext );
+VOS_STATUS vos_watchdog_fail_handle ( v_PVOID_t pVosContext );
 
 /* Helper routines provided to other VOS API's */
 VOS_STATUS vos_mq_init(pVosMqType pMq);

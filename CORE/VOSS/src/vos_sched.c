@@ -1474,6 +1474,27 @@ VOS_STATUS vos_watchdog_close ( v_PVOID_t pVosContext )
     return VOS_STATUS_SUCCESS;
 } /* vos_watchdog_close() */
 
+//Follow this change in the new function.
+VOS_STATUS vos_watchdog_fail_handle ( v_PVOID_t pVosContext ) {
+    VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
+        "%s: vos_watchdog closing now", __func__);
+    if (gpVosWatchdogContext == NULL)
+    {
+       VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
+           "%s: gpVosWatchdogContext is NULL",__func__);
+       return VOS_STATUS_E_FAILURE;
+    }
+    set_bit(WD_SHUTDOWN_EVENT, &gpVosWatchdogContext->wdEventFlag);
+    set_bit(WD_POST_EVENT, &gpVosWatchdogContext->wdEventFlag);
+    wake_up_interruptible(&gpVosWatchdogContext->wdWaitQueue);
+    //Wait for Watchdog thread to exit
+    //wait_for_completion(&gpVosWatchdogContext->WdShutdown);
+
+    VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,"do nothing in %s",__func__);
+	
+    return VOS_STATUS_SUCCESS;
+} /* vos_watchdog_fail_handle() */
+
 /*---------------------------------------------------------------------------
   \brief vos_sched_init_mqs: Initialize the vOSS Scheduler message queues
   The \a vos_sched_init_mqs() function initializes the vOSS Scheduler
